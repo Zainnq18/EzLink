@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EzLink - URL Shortener</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>EzLink</h1>
+        <p>Shorten your URLs instantly, just like Bitly!</p>
+
+        <div class="shorten-card">
+            <input type="url" id="original_url" placeholder="Paste your link here" required>
+            <input type="text" id="custom_code" placeholder="Custom code (optional, max 10 chars)">
+            <button onclick="shortenURL()">Shorten</button>
+        </div>
+
+        <div id="result" class="result-card"></div>
+
+        <div class="analytics-card">
+            <h2>Top Links</h2>
+            <button onclick="getTopLinks()">Refresh Top Links</button>
+            <div id="top-links"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
