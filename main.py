@@ -16,8 +16,8 @@ from utils import encode_base62
 app = FastAPI()
 
 # ---------------- Static & Templates ----------------
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="../static"), name="static")
+Jinja2Templates(directory="../templates")
 
 
 @app.get("/")
