@@ -8,10 +8,10 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import time
 
-from .database import SessionLocal
-from .models import URL
-from .schemas import URLCreate
-from .utils import encode_base62
+from database import SessionLocal
+from models import URL
+from schemas import URLCreate
+from utils import encode_base62
 
 app = FastAPI()
 
