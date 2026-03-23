@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EzLink | Premium URL Management</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="light-mode">
+    
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <span class="logo-box"><i class="fas fa-link"></i></span>
+                <span class="logo-text">EzLink.</span>
+            </a>
+            
+            <div class="nav-actions">
+                <ul class="nav-menu">
+                    <li><a href="#how-it-works" class="nav-link">How it Works</a></li>
+                    <li><a href="#features" class="nav-link">Features</a></li>
+                    <li><a href="#analytics" class="nav-link">Analytics</a></li>
+                </ul>
+                
+                <div class="separator"></div>
+
+                <button id="theme-switch" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fas fa-sun sun-icon"></i>
+                    <i class="fas fa-moon moon-icon"></i>
+                </button>
+
+                <a href="#contact" class="btn btn-primary magnetic">
+                    <span>Get in Touch</span>
+                </a>
+            </div>
+            
+            <div class="hamburger">
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <div class="mobile-links">
+            <a href="#how-it-works">How it Works</a>
+            <a href="#features">Features</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+
+    <header class="hero">
+        <div class="container hero-wrapper">
+            <div class="hero-content">
+                <div class="badge-pill reveal-text">
+                    <span class="dot"></span> v2.0 is now live
+                </div>
+                <h1 class="hero-title">
+                    <div class="line-wrap"><span class="reveal-text">Make every link</span></div>
+                    <div class="line-wrap">
+                        <span class="reveal-text">count with 
+                            <span class="highlight-text" id="typewriter"></span><span class="cursor-bar">|</span>
+                        </span>
+                    </div>
+                </h1>
+                <p class="hero-sub reveal-text">
+                    The enterprise-grade URL shortener for creators and brands. 
+                    Transform long links into smart, trackable assets without the complexity.
+                </p>
+            </div>
+
+            <div class="tool-interface reveal-up">
+                <div class="tool-header">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="simple">Quick Shorten</button>
+                        <button class="tab-btn" data-tab="custom">Custom Alias</button>
+                    </div>
+                    <div class="status-indicator">
+                        <span class="pulse"></span> System Operational
+                    </div>
+                </div>
+
+                <div class="tool-body">
+                    <div class="input-row">
+                        <div class="input-wrapper main-url">
+                            <label>Destination URL</label>
+                            <input type="url" id="original_url" placeholder="https://very-long-website.com/article/2026...">
+                        </div>
+                    </div>
+
+                    <div class="advanced-options">
+                        <div class="input-row grid-2">
+                            <div class="input-wrapper">
+                                <label>Custom Alias (Optional)</label>
+                                <div class="joined-input">
+                                    <span class="prefix">ez.link/</span>
+                                    <input type="text" id="custom_code" placeholder="my-brand">
+                                </div>
+                            </div>
+                            <div class="input-wrapper">
+                                <label>Expiration</label>
+                                <select id="expiration">
+                                    <option value="">Never expire</option>
+                                    <option value="7">7 Days</option>
+                                    <option value="30">30 Days</option>
+                                    <option value="365">1 Year</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tool-footer">
+                        <button onclick="shortenURL()" class="btn btn-accent btn-large">
+                            <span>Generate Link</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div id="result" class="result-area"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="marquee-section">
+        <div class="electron-track">
+            <div class="electron"></div>
+            <div class="electron"></div>
+            <div class="electron"></div>
+        </div>
+        <div class="marquee-content">
+            <span>SECURE LINKS</span> <span class="divider">•</span>
+            <span>REAL-TIME ANALYTICS</span> <span class="divider">•</span>
+            <span>CUSTOM BRANDING</span> <span class="divider">•</span>
+            <span>QR CODE GENERATION</span> <span class="divider">•</span>
+            <span>99.9% UPTIME</span> <span class="divider">•</span>
+            <span>SECURE LINKS</span> <span class="divider">•</span>
+            <span>REAL-TIME ANALYTICS</span> <span class="divider">•</span>
+            <span>CUSTOM BRANDING</span> <span class="divider">•</span>
+        </div>
+    </div>
+
+    <section class="section steps" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Workflow optimized<br>for <span class="serif-italic">speed</span></h2>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step-card" data-step="01">
+                    <div class="step-number">01</div>
+                    <h3>Paste URL</h3>
+                    <p>Simply copy your long, complex URL and paste it into our secure engine. We handle the heavy lifting instantly.</p>
+                </div>
+                <div class="step-card" data-step="02">
+                    <div class="step-number">02</div>
+                    <h3>Customize</h3>
+                    <p>Add your brand flair. Choose a custom alias (e.g., /summer-sale) to increase trust and click-through rates.</p>
+                </div>
+                <div class="step-card" data-step="03">
+                    <div class="step-number">03</div>
+                    <h3>Track & Grow</h3>
+                    <p>Share your link and watch the data roll in. Analyze geographic location, device types, and peak traffic times.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section features" id="features">
+        <div class="container">
+            <div class="section-header center">
+                <span class="sub-tag">Why Us?</span>
+                <h2 class="section-title">Everything you need in<br>one dashboard</h2>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-card span-2 bg-olive text-white">
+                    <div class="card-content">
+                        <div class="icon-circle white"><i class="fas fa-bolt"></i></div>
+                        <h3>Lightning Fast Redirection</h3>
+                        <p>Our edge network ensures your links load in milliseconds, reducing bounce rates effectively.</p>
+                    </div>
+                    <div class="visual-abstract speed-lines">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+
+                <div class="bento-card span-1 row-2 bg-cream">
+                    <div class="card-content">
+                        <div class="icon-circle olive"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Enterprise Security</h3>
+                        <p>HTTPS encryption comes standard. We scan every link for malware to protect your reputation.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> SSL Certified</li>
+                            <li><i class="fas fa-check"></i> Malware Scanning</li>
+                            <li><i class="fas fa-check"></i> GDPR Compliant</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bento-card span-1 bg-white border-card">
+                    <div class="card-content">
+                        <div class="icon-circle orange"><i class="fas fa-qrcode"></i></div>
+                        <h3>Smart QR Codes</h3>
+                        <p>Generate high-res QR codes automatically for your print marketing campaigns.</p>
+                    </div>
+                </div>
+
+                <div class="bento-card span-1 bg-white border-card">
+                    <div class="card-content">
+                        <div class="icon-circle olive"><i class="fas fa-chart-pie"></i></div>
+                        <h3>Deep Analytics</h3>
+                        <p>Understand your audience with granular data points and exportable reports.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section analytics" id="analytics">
+        <div class="container">
+            <div class="split-layout">
+                <div class="text-content">
+                    <h2 class="section-title">Data driven <br><span class="highlight-text">decisions.</span></h2>
+                    <p class="lead">Stop guessing. Start knowing. Enter your short code below to see how your content is performing in real-time.</p>
+                    
+                    <div class="search-bar-styled">
+                        <input type="text" id="analytics_code" placeholder="Enter link alias (e.g. my-link)">
+                        <button onclick="loadAnalyticsByCode(document.getElementById('analytics_code').value.trim())" class="btn-icon">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div id="analytics-result" class="analytics-display">
+                        <div class="empty-state">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="visual-content">
+                    <div class="leaderboard-card">
+                        <div class="card-header">
+                            <h3>Top Performing Assets</h3>
+                            <button onclick="getTopLinks()" class="refresh-icon"><i class="fas fa-sync-alt"></i></button>
+                        </div>
+                        <div id="top-links" class="links-list">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section faq bg-cream">
+        <div class="container">
+            <div class="section-header center">
+                <h2 class="section-title">Common Questions</h2>
+            </div>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h4>Is this service really free?</h4>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="accordion-body">
+                        <p>Yes! Our basic shortening service is completely free to use without an account. We believe in open access to simple web tools.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h4>Can I edit the destination URL later?</h4>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="accordion-body">
+                        <p>Currently, link destinations are permanent to ensure link integrity. We are working on a premium feature to allow mutable links.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h4>How long do links last?</h4>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="accordion-body">
+                        <p>By default, links do not expire. However, you can set a custom expiration date (7 or 30 days) using the advanced options in the tool.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section contact" id="contact">
+        <div class="container">
+            <div class="contact-box">
+                <h2>Get in Touch</h2>
+                <p>Have questions about enterprise scaling or API integration? We are here to help.</p>
+                <a href="mailto:zainn.qureshi18@gmail.com" class="email-link">zainn.qureshi18@gmail.com</a>
+                <div class="location-tag">
+                    <i class="fas fa-map-marker-alt"></i> Bengaluru, Karnataka, India
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <span class="logo-text">EzLink.</span>
+                    <p>Crafted for modern web standards.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="col">
+                        <h4>Product</h4>
+                        <a href="#">Features</a>
+                        <a href="#">Security</a>
+                        <a href="#">Roadmap</a>
+                    </div>
+                    <div class="col">
+                        <h4>Company</h4>
+                        <a href="#">About</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Contact</a>
+                    </div>
+                    <div class="col">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy</a>
+                        <a href="#">Terms</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EzLink. Made with <i class="fas fa-heart text-orange"></i> in India.</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
