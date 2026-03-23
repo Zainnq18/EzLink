@@ -7,22 +7,23 @@ from sqlalchemy import func
 from datetime import datetime, timedelta
 from collections import defaultdict
 import time
+import os
 
-from database import SessionLocal
-from models import URL
+from database import SessionLocal, engine
+from models import URL, Base
 from schemas import URLCreate
 from utils import encode_base62
 
 app = FastAPI()
 
-# ---------------- Static & Templates ----------------
-app.mount("/static", StaticFiles(directory="../static"), name="static")
-Jinja2Templates(directory="../templates")
+# ---------------- Correct Paths ----------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+STATIC_DIR = os.path.join(BASE_DIR, "..", "static")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "..", "templates")
 
-@app.get("/")
-def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 
 # ---------------- Database Dependency ----------------
@@ -54,6 +55,12 @@ RATE_LIMIT = 10
 WINDOW = 60
 
 
+# ---------------- Home ----------------
+@app.get("/")
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
 # ---------------- Shorten URL ----------------
 @app.post("/shorten")
 def create_short_url(
@@ -64,10 +71,7 @@ def create_short_url(
     client_ip = request.client.host
 
     if is_rate_limited(client_ip, "/shorten", RATE_LIMIT, WINDOW):
-        raise HTTPException(
-            status_code=429,
-            detail="Rate limit exceeded"
-        )
+        raise HTTPException(status_code=429, detail="Rate limit exceeded")
 
     existing_url = (
         db.query(URL)
@@ -81,7 +85,7 @@ def create_short_url(
             if existing_url.expires_at else None
         )
         return {
-            "short_url": f"http://localhost:8000/{existing_url.short_code}",
+            "short_url": f"/{existing_url.short_code}",
             "expires_in_days": expires_in,
             "message": "URL already shortened"
         }
@@ -100,7 +104,7 @@ def create_short_url(
     db.commit()
 
     return {
-        "short_url": f"http://localhost:8000/{new_url.short_code}",
+        "short_url": f"/{new_url.short_code}",
         "expires_in_days": 30,
         "message": "New short URL created"
     }
@@ -117,17 +121,11 @@ def create_custom_short_url(
     client_ip = request.client.host
 
     if is_rate_limited(client_ip, "/shorten/custom", 3, 60):
-        raise HTTPException(
-            status_code=429,
-            detail="Rate limit exceeded"
-        )
+        raise HTTPException(status_code=429, detail="Rate limit exceeded")
 
     if custom_code:
         if db.query(URL).filter(URL.short_code == custom_code).first():
-            raise HTTPException(
-                status_code=400,
-                detail="Custom code already taken"
-            )
+            raise HTTPException(status_code=400, detail="Custom code already taken")
 
         new_url = URL(
             original_url=str(url.original_url),
@@ -140,7 +138,7 @@ def create_custom_short_url(
         db.commit()
 
         return {
-            "short_url": f"http://localhost:8000/{custom_code}",
+            "short_url": f"/{custom_code}",
             "expires_in_days": 30,
             "message": "Custom short URL created"
         }
@@ -148,7 +146,7 @@ def create_custom_short_url(
     return create_short_url(url, request, db)
 
 
-# ================= ANALYTICS (ORDER MATTERS) =================
+# ================= ANALYTICS =================
 
 @app.get("/analytics/total_clicks")
 def get_total_clicks(db: Session = Depends(get_db)):
@@ -174,7 +172,7 @@ def get_top_links(db: Session = Depends(get_db)):
 
         result.append({
             "original_url": url.original_url,
-            "short_url": f"http://localhost:8000/{url.short_code}",
+            "short_url": f"/{url.short_code}",
             "click_count": url.click_count,
             "created_at": url.created_at.isoformat(),
             "expires_in_days": expires_in_days
@@ -196,14 +194,14 @@ def get_analytics(short_code: str, db: Session = Depends(get_db)):
 
     return {
         "original_url": url.original_url,
-        "short_url": f"http://localhost:8000/{url.short_code}",
+        "short_url": f"/{url.short_code}",
         "click_count": url.click_count,
         "created_at": url.created_at.isoformat(),
         "expires_in_days": expires_in_days
     }
 
 
-# ================= REDIRECT (KEEP LAST) =================
+# ================= REDIRECT =================
 
 @app.get("/{short_code}")
 def redirect_to_original(short_code: str, db: Session = Depends(get_db)):
@@ -222,7 +220,4 @@ def redirect_to_original(short_code: str, db: Session = Depends(get_db)):
 
 
 # ---------------- CREATE TABLES ----------------
-from .models import Base
-from .database import engine
-
 Base.metadata.create_all(bind=engine)
